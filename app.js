@@ -46,11 +46,19 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((obj, done) => {
+  let UserModel;
+
   if (obj.type === 'Freelancer') {
-    Freelancer.findById(obj.id, (err, user) => done(err, user));
+    UserModel = Freelancer;
   } else if (obj.type === 'Client') {
-    Client.findById(obj.id, (err, user) => done(err, user));
+    UserModel = Client;
+  } else {
+    return done(new Error('Unknown user type'), null);
   }
+
+  UserModel.findById(obj.id)
+    .then(user => done(null, user))
+    .catch(err => done(err, null));
 });
 
 app.use(logger('dev'));
