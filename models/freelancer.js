@@ -5,6 +5,7 @@ const freelancerSchema = mongoose.Schema({
   username : String, 
   password : String,
   email : String,
+  publicKey : String,
   type: { type: String, default: "Freelancer" },    
   invites: [
     {

@@ -31,6 +31,7 @@ exports.registerFreelancer = async (req, res, next) => {
     var freelancerData = new freelancerModel({
       username: req.body.username,
       email: req.body.email,
+      publicKey: req.body.publicKey,
     });
   
     freelancerModel

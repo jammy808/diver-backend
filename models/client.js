@@ -5,6 +5,7 @@ const clientSchema = mongoose.Schema({
   username : String, 
   password : String,
   email : String,
+  publicKey : String,
   type: { type: String, default: "Client" },
   gigs: [
     {

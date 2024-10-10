@@ -31,6 +31,7 @@ exports.registerClient = async (req, res, next) => {
     var clientData = new clientModel({
       username: req.body.username,
       email: req.body.email,
+      publicKey: req.body.publicKey,
     });
   
     clientModel
@@ -112,7 +113,14 @@ exports.getClient = async (req, res) => {
   try {
     const clientId = req.user._id;
     
-    const client = await clientModel.findById(clientId).populate('gigs');
+    const client = await clientModel.findById(clientId)
+    .populate({
+      path: 'gigs',
+      populate: {
+        path: 'workingFreelancer',
+        model: 'Freelancer',
+      }
+    });
     
     if (!client) {
       return res.status(404).json({ message: 'Client not found' });
