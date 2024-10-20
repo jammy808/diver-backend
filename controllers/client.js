@@ -291,3 +291,14 @@ exports.acceptApplication = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 }
+
+exports.logout = async (req, res, next) => {
+  req.logout(function(err) {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Failed to log out user.", error: err });
+    }
+    return res.status(200).json({ message: "Logout successful"});
+  });
+};

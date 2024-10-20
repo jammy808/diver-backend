@@ -37,5 +37,7 @@ router.get("/profile", freelancer.ensureAuthenticated, (req, res) => {
 
 router.get('/get/freelancer' , freelancer.getFreelancer);
 
+router.get("/logout", client.logout);
+
 
 module.exports = router;
