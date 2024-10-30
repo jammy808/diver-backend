@@ -13,8 +13,46 @@ const LocalStrategy = require('passport-local').Strategy;
 const router = require("./router")
 const Freelancer = require('./models/freelancer');
 const Client = require('./models/client');
+const Message = require('./models/message');
+
+const http = require('http');
+const { Server } = require('socket.io');
 
 var app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors:{
+    origin: '*',
+    methods: ['GET' , 'POST'],
+  }
+})
+
+// Socket.io connection handler
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  // Join a specific gig room for chat
+  socket.on('joinGig', (gigId) => {
+    socket.join(gigId);
+    console.log(`User joined gig room: ${gigId}`);
+  });
+
+  // Listen for new messages
+  socket.on('sendMessage', async (data) => {
+    const { senderId, senderModel, gigId, content } = data;
+
+    // Save message to MongoDB
+    const newMessage = new Message({ sender: senderId, senderModel, gig: gigId, content });
+    await newMessage.save();
+
+    // Emit the message to all clients in the gig room
+    io.to(gigId).emit('receiveMessage', newMessage);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -90,7 +128,7 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    app.listen(8000, () => console.log("Connected"));
+    server.listen(8000, () => console.log("Connected"));
   })
   .catch((error) => console.log(error));
 

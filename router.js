@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const freelancer = require('./controllers/freelancer')
 const client = require('./controllers/client')
+const Message = require('./models/message');
 
 router.get('/' , (req , res) =>{
     res.send("hello");;
@@ -36,6 +37,15 @@ router.get("/profile", freelancer.ensureAuthenticated, (req, res) => {
   });
 
 router.get('/get/freelancer' , freelancer.getFreelancer);
+
+router.get('/api/messages/:gigId', async (req, res) => {
+  try {
+    const messages = await Message.find({ gig: req.params.gigId }).sort('timestamp');
+    res.json(messages);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
+});
 
 router.get("/logout", client.logout);
 
