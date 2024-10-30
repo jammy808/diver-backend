@@ -17,6 +17,7 @@ const Message = require('./models/message');
 
 const http = require('http');
 const { Server } = require('socket.io');
+const allowedOrigins = ["http://localhost:5173", "https://diverr-frontend-jammy808s-projects.vercel.app"];
 
 var app = express();
 const server = http.createServer(app);
@@ -59,11 +60,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(
-    cors({
-      origin: "http://localhost:5173",
-      credentials: true, // Allow credentials (cookies) to be sent
-    })
-  );
+  cors({
+    origin: function (origin, callback) {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow credentials (cookies) to be sent
+  })
+);
 
 app.use(expressSession({
   resave : false,
