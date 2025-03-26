@@ -47,6 +47,10 @@ exports.registerFreelancer = async (req, res, next) => {
 
 exports.ensureAuthenticated = (req, res, next) => {
   //console.log(req.user);
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  console.log('Authenticated:', req.isAuthenticated());
+  
   if (req.isAuthenticated()) {
     return next();
   }

@@ -72,11 +72,20 @@ app.use(
   })
 );
 
-app.use(expressSession({
-  resave : false,
-  saveUninitialized : false,
-  secret : "yoyo whatup"
-}))
+app.set("trust proxy", 1); // Enable trust proxy for secure cookies in production
+
+app.use(
+  expressSession({
+    secret: "yoyo whatup",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // Secure cookies in production
+      httpOnly: true,
+      sameSite: "none",
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());

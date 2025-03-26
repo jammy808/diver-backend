@@ -62,6 +62,22 @@ exports.ensureClient = (req, res, next) => {
   res.status(403).json({ message: 'Forbidden: Access is allowed only for clients.' });
 };
 
+exports.updateProfilePic = async (req, res) => {
+  try {
+    //console.log(req.user._id);
+    const client = await clientModel.findById(req.user._id);
+    console.log("this is before" + client.profileUrl);
+    console.log("link - " + req.file.path);
+    client.profileUrl = req.file.path;
+    await client.save();
+    console.log("this is after" + client.profileUrl);
+
+    res.status(200).json({ message: 'Image uploaded successfully'});
+  } catch (error) {
+    res.status(500).json({ message: 'Image upload failed', error });
+  }
+}
+
 exports.createGig = async (req, res) => {
   try {
   

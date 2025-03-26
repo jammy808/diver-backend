@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const plm = require('passport-local-mongoose');
   
 const clientSchema = mongoose.Schema({
+  profileUrl : String,
   username : String, 
   password : String,
   email : String,

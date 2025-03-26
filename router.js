@@ -3,6 +3,7 @@ const router = express.Router();
 const freelancer = require('./controllers/freelancer')
 const client = require('./controllers/client')
 const Message = require('./models/message');
+const upload = require('./config/multer');
 
 router.get('/' , (req , res) =>{
     res.send("hello");;
@@ -34,7 +35,7 @@ router.post('/accept/application' , client.ensureAuthenticated , client.acceptAp
 router.get("/profile", freelancer.ensureAuthenticated, (req, res) => {
     // Send user data as JSON
     res.status(200).json({ user: req.user });
-  });
+});
 
 router.get('/get/freelancer' , freelancer.getFreelancer);
 
@@ -46,6 +47,8 @@ router.get('/api/messages/:gigId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
+
+router.post('/upload', upload.single('file') , client.updateProfilePic);
 
 router.get("/logout", client.logout);
 
