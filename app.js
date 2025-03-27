@@ -17,7 +17,7 @@ const Message = require('./models/message');
 
 const http = require('http');
 const { Server } = require('socket.io');
-const allowedOrigins = ["http://localhost:5173", "https://diverr-frontend-jammy808s-projects.vercel.app"];
+const allowedOrigins = ["http://localhost:5173", "https://diverr-frontend-jammy808s-projects.vercel.app" , "https://diverr-e8czcyeth2dpf8ek.canadacentral-01.azurewebsites.net"];
 
 var app = express();
 const server = http.createServer(app);
