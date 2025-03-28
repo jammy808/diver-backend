@@ -144,7 +144,7 @@ mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    server.listen(8000, () => console.log("Connected"));
+    server.listen(8080, () => console.log("Connected"));
   })
   .catch((error) => console.log(error));
 
